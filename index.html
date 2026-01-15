@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack 194 Yo-Yo Name Generator</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪀</text></svg>">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Lucide Sparkles icon component (simplified)
+        const Sparkles = ({ className }) => (
+            <svg 
+                className={className}
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+            >
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                <path d="M5 3v4"/>
+                <path d="M19 17v4"/>
+                <path d="M3 5h4"/>
+                <path d="M17 19h4"/>
+            </svg>
+        );
+
+        function YoYoNameGenerator() {
+            const [name, setName] = useState('');
+            const [yoyoName, setYoyoName] = useState('');
+            const [showResult, setShowResult] = useState(false);
+            const [isSillyMode, setIsSillyMode] = useState(true);
+            const [easyTrick, setEasyTrick] = useState('');
+            const [recommendedSong, setRecommendedSong] = useState('');
+
+            const sillyPrefixes = [
+                'Captain Wiggly', 'Professor', 'Disco', 'Funky', 'Wacky', 'Sir Spins-a-lot', 'Dizzy',
+                'The Incredible', 'Jiggly', 'Bouncy', 'Squishy', 'Loopy', 'Giggly', 'Crazy',
+                'Wobbly', 'Spinny', 'Zippy', 'Silly', 'Bonkers', 'Goofy', 'Doctor', 'Major',
+                'Sparkly', 'Wiggles', 'DJ', 'Master', 'Admiral', 'Count', 'Baron', 'Sergeant',
+                'Reverend', 'Commander', 'Colonel', 'General', 'Duke', 'Lord', 'Prince',
+                'Super', 'Ultra', 'Mega', 'Turbo', 'Hyper', 'Jumpy', 'Zany', 'Wild',
+                'Slappy', 'Flappy', 'Snappy', 'Happy', 'Peppy', 'Zippy', 'Dippy', 'Tipsy',
+                'Mighty', 'Tiny', 'Big', 'Little', 'Giant', 'Mini', 'Jumbo', 'Teeny',
+                'Cosmic', 'Galactic', 'Stellar', 'Lunar', 'Solar', 'Astro', 'Space',
+                'Electric', 'Atomic', 'Nuclear', 'Laser', 'Turbo', 'Nitro', 'Rocket',
+                'Baby', 'Lil', 'Young', 'Old', 'Ancient', 'Elder', 'Grandpa', 'Papa'
+            ];
+
+            const awesomePrefixes = [
+                'Super', 'Mega', 'Turbo', 'Lightning', 'Thunder', 'Blazing', 'Epic',
+                'Radical', 'Awesome', 'Stellar', 'Cosmic', 'Dynamic', 'Supreme', 'Ultimate',
+                'Alpha', 'Master', 'Champion', 'Elite', 'Phoenix', 'Titan'
+            ];
+
+            const sillyMiddleParts = [
+                'Pickle', 'Banana', 'Noodle', 'Waffle', 'Taco', 'Muffin', 'Nugget',
+                'Jellybean', 'Pancake', 'Bubble', 'Spaghetti', 'Doodle', 'Pudding',
+                'Cookie', 'Sprinkle', 'Cheese', 'Burrito', 'Pretzel', 'Donut', 'Pizza',
+                'Nacho', 'Tater Tot', 'Gummy Bear', 'Lollipop', 'Marshmallow', 'Popcorn',
+                'Cupcake', 'Brownie', 'Meatball', 'Hot Dog', 'Popsicle', 'Corn Dog',
+                'French Fry', 'Chicken Wing', 'Dumpling', 'Ravioli', 'Macaroni', 'Lasagna',
+                'Sandwich', 'Quesadilla', 'Chimichanga', 'Enchilada', 'Empanada', 'Tamale',
+                'Bagel', 'Croissant', 'Biscuit', 'Churro', 'Funnel Cake', 'Cotton Candy',
+                'Peanut Butter', 'Guacamole', 'Salsa', 'Ketchup', 'Mustard', 'Mayo',
+                'Pickle Juice', 'Cheese Puff', 'Twinkie', 'Ding Dong', 'Ho Ho',
+                'Bacon', 'Spam', 'Bologna', 'Sausage', 'Pepperoni', 'Salami', 'Bratwurst',
+                'Tofu', 'Tempeh', 'Seitan', 'Quinoa', 'Hummus', 'Falafel', 'Pita',
+                'Ramen', 'Udon', 'Soba', 'Pho', 'Kimchi', 'Tofu', 'Edamame', 'Sushi',
+                'Breadstick', 'Crouton', 'Cracker', 'Goldfish', 'Cheez-It', 'Dorito',
+                'Frito', 'Chip', 'Crisp', 'Cheeto', 'Skittle', 'M&M', 'Reese'
+            ];
+
+            const awesomeMiddleParts = [
+                'Blaze', 'Storm', 'Thunder', 'Hawk', 'Eagle', 'Dragon', 'Phoenix',
+                'Tiger', 'Wolf', 'Bear', 'Falcon', 'Viper', 'Rocket', 'Comet',
+                'Shadow', 'Bolt', 'Flash', 'Strike', 'Sonic', 'Inferno'
+            ];
+
+            const sillyTricks = [
+                'Spinner', 'Twirler', 'Wobbler', 'Flopper', 'Bouncer', 
+                'Zoomer', 'Whoosher', 'Giggler', 'Flipper', 'Dinger', 'Swinger',
+                'Roller', 'Looper', 'Boinger', 'Splatter', 'Wiggler', 'Jiggler',
+                'Shaker', 'Quaker', 'Waddler', 'Shuffler', 'Bumbler', 'Tumbler',
+                'Dangler', 'Jangler', 'Mangler', 'Tangler', 'Spazzer', 'Flinger',
+                'Slinger', 'Zinger', 'Dinger', 'Binger', 'Pinger', 'Ringer',
+                'Bopper', 'Hopper', 'Popper', 'Dropper', 'Stopper', 'Flopper',
+                'Rattler', 'Battler', 'Prattler', 'Chattler', 'Tattler'
+            ];
+
+            const awesomeTricks = [
+                'Sleeper', 'Walker', 'Rocker', 'Looper', 'Spinner', 
+                'Thrower', 'Gravity', 'Trapeze', 'Whipper', 'Orbiter', 'Ripcord',
+                'Elevator', 'Ninja', 'Brain Twister', 'Sidekick', 'Matrix', 'Bind',
+                'Breakaway', 'Hop', 'Pop', 'Grind', 'Slack', 'Whip', 'Suicide'
+            ];
+
+            const sillySuffixes = [
+                'McGee', 'Face', 'Pants', 'Tron 3000', 'of Awesomeness', 'the Brave', 'Junior',
+                'Supreme', 'Extraordinaire', 'the Magnificent', 'Von Spinstein', 'McSpinny',
+                'the Great', 'the Silly', 'the Fantastic', 'kins', 'O\'Reilly', 'McFlurry',
+                'Jones', 'Smith', 'the Third', 'the Fourth', 'the Fifth', 'the Sixth',
+                'Von Wigglesworth', 'McBoingboing', 'Von Yoyostein', 'the Clumsy',
+                'the Confused', 'the Dizzy', 'the Wobbly', 'the Wild', 'the Wacky',
+                'Doodle', 'Noodle', 'Strudel', 'Poodle', 'Oodle', 'Caboodle',
+                'Saurus', 'Zilla', 'Inator', '9000', '2000', 'XL', 'Plus', 'Pro',
+                'Max', 'Ultra', 'Extreme', 'Deluxe', 'Premium', 'Gold Edition',
+                'McWigglebutt', 'Von Sillypants', 'O\'Doyle', 'McSprinkles', 'the Destroyer',
+                'the Mighty', 'the Legendary', 'the Epic', 'the Radical', 'the Groovy',
+                'the Funkadelic', 'the Bodacious', 'the Tubular', 'the Gnarly',
+                'erson', 'son', 'sen', 'berg', 'stein', 'man', 'ton', 'ley'
+            ];
+
+            const awesomeSuffixes = [
+                'Master', 'Champion', 'Scout', 'Hero', 'Legend', 'Pro', 'Star',
+                'Wizard', 'Captain', 'Ace', 'King', 'Warrior', 'Ranger', 'Commander',
+                'the Fearless', 'the Bold', 'the Mighty', 'the Unstoppable'
+            ];
+
+            const easyTricks = [
+                { name: 'The Sleeper', description: 'Throw the yo-yo down hard and let it spin at the bottom for 3-5 seconds!' },
+                { name: 'Walk the Dog', description: 'Do a sleeper, then gently touch the yo-yo to the ground and let it "walk" forward!' },
+                { name: 'Around the World', description: 'Throw the yo-yo out in front of you and make a big circle in the air!' },
+                { name: 'Rock the Baby', description: 'Make a triangle with the string and swing the yo-yo back and forth like a baby in a cradle!' },
+                { name: 'The Forward Pass', description: 'Throw the yo-yo forward (not down), let it spin, then pull it back to your hand!' },
+                { name: 'The Breakaway', description: 'Throw the yo-yo to the side and let it swing across your body in a big arc!' },
+                { name: 'The Elevator', description: 'Make the yo-yo go up and down like an elevator by pulling the string!' },
+                { name: 'The Creeper', description: 'Like Walk the Dog, but you kneel down and pull it back to you along the ground!' },
+                { name: 'Hop the Fence', description: 'Do a sleeper, then lift the yo-yo over an imaginary fence and back down!' },
+                { name: 'Trapeze', description: 'Land the yo-yo on the string between your hands like a trapeze artist!' },
+                { name: 'Around the Corner', description: 'Make the yo-yo go around your shoulder and come back!' },
+                { name: 'Brain Twister', description: 'Create a cool loop formation and flip the yo-yo through it!' },
+                { name: 'The UFO', description: 'Make the yo-yo spin sideways like a flying saucer!' },
+                { name: 'Split the Atom', description: 'A series of quick hops and flips that looks super cool!' },
+                { name: 'Eiffel Tower', description: 'Create a tower shape with the string that looks like the Eiffel Tower!' },
+                { name: 'Double or Nothing', description: 'A trick where you land the yo-yo on two strings at once!' },
+                { name: 'The Pinwheel', description: 'Spin the yo-yo in circles at your side like a pinwheel!' },
+                { name: 'Loop the Loop', description: 'Do a forward pass, but instead of catching it, let it loop back out again!' },
+                { name: 'Man on the Flying Trapeze', description: 'An advanced version of the trapeze with extra style!' },
+                { name: 'Skin the Cat', description: 'Swing the yo-yo over your hand in a loop and catch it!' },
+                { name: 'Barrel Rolls', description: 'Make the yo-yo do barrel rolls while spinning!' },
+                { name: 'Bind Return', description: 'The essential trick for getting an unresponsive yo-yo back to your hand!' },
+                { name: 'Picture Tricks', description: 'Create fun shapes and pictures with the yo-yo and string!' },
+                { name: 'Gravity Pull', description: 'Let the yo-yo sleep at the bottom, then give a gentle tug to bring it back up!' },
+                { name: 'Rewind', description: 'Learn the basic way to get your yo-yo back on the string!' },
+                { name: 'The Dizzy Baby', description: 'Like Rock the Baby, but spin around while doing it!' },
+                { name: 'Texas Star', description: 'Create a cool star pattern with the string!' },
+                { name: 'The Mach 5', description: 'Swing the yo-yo back and forth 5 times super fast!' },
+                { name: 'Boomerang', description: 'Throw it like a boomerang and catch it as it comes back!' },
+                { name: 'Time Warp', description: 'A cool trick where you bounce the yo-yo on the string!' },
+                { name: 'Pop \'n\' Fresh', description: 'Pop the yo-yo up and catch it in different positions!' },
+                { name: 'The Monkey', description: 'Climb the string like a monkey climbing a tree!' },
+                { name: 'Dizzy Hands', description: 'Wave your free hand around while the yo-yo sleeps!' },
+                { name: 'Baby Cradle', description: 'A simpler version of Rock the Baby for beginners!' },
+                { name: 'Over the Shoulder', description: 'Toss the yo-yo over your shoulder and catch it!' },
+                { name: 'Tidal Wave', description: 'Make wave motions with the string while the yo-yo spins!' },
+                { name: 'The Zipper', description: 'Zip the yo-yo up and down the string quickly!' },
+                { name: 'Shoot the Moon', description: 'Launch the yo-yo high up into the air!' },
+                { name: 'The Pendulum', description: 'Swing the yo-yo back and forth like a grandfather clock!' },
+                { name: 'The Spiral', description: 'Make the yo-yo spiral down and back up!' }
+            ];
+
+            const yoyoSongs = [
+                { name: 'U Can\'t Touch This', artist: 'MC Hammer', type: 'cool' },
+                { name: 'Jump Around', artist: 'House of Pain', type: 'cool' },
+                { name: 'Bust a Move', artist: 'Young MC', type: 'cool' },
+                { name: 'Ice Ice Baby', artist: 'Vanilla Ice', type: 'cool' },
+                { name: 'Gettin\' Jiggy Wit It', artist: 'Will Smith', type: 'cool' },
+                { name: 'Men in Black', artist: 'Will Smith', type: 'cool' },
+                { name: 'Wild Wild West', artist: 'Will Smith', type: 'cool' },
+                { name: 'Whoomp! (There It Is)', artist: 'Tag Team', type: 'cool' },
+                { name: 'Gonna Make You Sweat', artist: 'C+C Music Factory', type: 'cool' },
+                { name: 'Pump Up the Jam', artist: 'Technotronic', type: 'cool' },
+                { name: 'Summertime', artist: 'DJ Jazzy Jeff & The Fresh Prince', type: 'cool' },
+                { name: 'Parents Just Don\'t Understand', artist: 'DJ Jazzy Jeff & The Fresh Prince', type: 'cool' },
+                { name: 'Who Let the Dogs Out', artist: 'Baha Men', type: 'silly' },
+                { name: 'The Hamster Dance', artist: 'Hampton the Hampster', type: 'silly' },
+                { name: 'Mambo No. 5', artist: 'Lou Bega', type: 'silly' },
+                { name: 'Cotton Eye Joe', artist: 'Rednex', type: 'silly' },
+                { name: 'The Macarena', artist: 'Los Del Rio', type: 'silly' },
+                { name: 'YMCA', artist: 'Village People', type: 'silly' },
+                { name: 'The Gummy Bear Song', artist: 'Gummibär', type: 'silly' },
+                { name: 'The Chicken Dance', artist: 'Werner Thomas', type: 'silly' },
+                { name: 'Axel F (Crazy Frog)', artist: 'Crazy Frog', type: 'silly' },
+                { name: 'What Does The Fox Say', artist: 'Ylvis', type: 'silly' },
+                { name: 'Baby Shark', artist: 'Pinkfong', type: 'silly' },
+                { name: 'Peanut Butter Jelly Time', artist: 'Buckwheat Boyz', type: 'silly' },
+                { name: 'The Cha Cha Slide', artist: 'DJ Casper', type: 'silly' },
+                { name: 'The Cupid Shuffle', artist: 'Cupid', type: 'silly' },
+                { name: 'The Hokey Pokey', artist: 'Various Artists', type: 'silly' },
+                { name: 'Witch Doctor', artist: 'David Seville', type: 'silly' },
+                { name: 'The Purple People Eater', artist: 'Sheb Wooley', type: 'silly' },
+                { name: 'Surfin\' Bird', artist: 'The Trashmen', type: 'silly' },
+                { name: 'Happy', artist: 'Pharrell Williams', type: 'cool' },
+                { name: 'Can\'t Stop the Feeling', artist: 'Justin Timberlake', type: 'cool' },
+                { name: 'Shake It Off', artist: 'Taylor Swift', type: 'cool' },
+                { name: 'Uptown Funk', artist: 'Mark Ronson ft. Bruno Mars', type: 'cool' },
+                { name: 'Everything Is Awesome', artist: 'Tegan and Sara', type: 'cool' },
+                { name: 'Thunder', artist: 'Imagine Dragons', type: 'cool' },
+                { name: 'Believer', artist: 'Imagine Dragons', type: 'cool' },
+                { name: 'Roar', artist: 'Katy Perry', type: 'cool' },
+                { name: 'Firework', artist: 'Katy Perry', type: 'cool' },
+                { name: 'Eye of the Tiger', artist: 'Survivor', type: 'cool' },
+                { name: 'We Will Rock You', artist: 'Queen', type: 'cool' },
+                { name: 'Don\'t Stop Me Now', artist: 'Queen', type: 'cool' },
+                { name: 'Walking on Sunshine', artist: 'Katrina and the Waves', type: 'cool' },
+                { name: 'Footloose', artist: 'Kenny Loggins', type: 'cool' },
+                { name: 'Twist and Shout', artist: 'The Beatles', type: 'cool' },
+                { name: 'I Want You Back', artist: 'Jackson 5', type: 'cool' },
+                { name: 'ABC', artist: 'Jackson 5', type: 'cool' },
+                { name: 'September', artist: 'Earth, Wind & Fire', type: 'cool' },
+                { name: 'Celebration', artist: 'Kool & The Gang', type: 'cool' },
+                { name: 'Good Vibrations', artist: 'The Beach Boys', type: 'cool' },
+                { name: 'La Bamba', artist: 'Ritchie Valens', type: 'cool' },
+                { name: 'Surfin\' USA', artist: 'The Beach Boys', type: 'cool' },
+                { name: 'Barbara Ann', artist: 'The Beach Boys', type: 'silly' },
+                { name: 'Louie Louie', artist: 'The Kingsmen', type: 'cool' },
+                { name: 'Shout', artist: 'The Isley Brothers', type: 'cool' },
+                { name: 'The Twist', artist: 'Chubby Checker', type: 'silly' },
+                { name: 'Wipeout', artist: 'The Surfaris', type: 'cool' },
+                { name: 'Tequila', artist: 'The Champs', type: 'silly' },
+                { name: 'Land of 1000 Dances', artist: 'Wilson Pickett', type: 'cool' },
+                { name: 'Rockin\' Robin', artist: 'Bobby Day', type: 'silly' },
+                { name: 'The Lion Sleeps Tonight', artist: 'The Tokens', type: 'silly' },
+                { name: 'Build Me Up Buttercup', artist: 'The Foundations', type: 'cool' },
+                { name: 'Sugar Sugar', artist: 'The Archies', type: 'silly' },
+                { name: 'Kung Fu Fighting', artist: 'Carl Douglas', type: 'cool' },
+                { name: 'The Loco-Motion', artist: 'Little Eva', type: 'silly' },
+                { name: 'Monster Mash', artist: 'Bobby Pickett', type: 'silly' },
+                { name: 'Ghostbusters', artist: 'Ray Parker Jr.', type: 'cool' },
+                { name: 'Here Comes the Hotstepper', artist: 'Ini Kamoze', type: 'cool' },
+                { name: 'Tubthumping', artist: 'Chumbawamba', type: 'cool' },
+                { name: 'MMMBop', artist: 'Hanson', type: 'silly' },
+                { name: 'The Sign', artist: 'Ace of Base', type: 'cool' },
+                { name: 'What Is Love', artist: 'Haddaway', type: 'cool' },
+                { name: 'Wannabe', artist: 'Spice Girls', type: 'cool' },
+                { name: 'No Scrubs', artist: 'TLC', type: 'cool' },
+                { name: 'Boom Boom Pow', artist: 'Black Eyed Peas', type: 'cool' },
+                { name: 'Dynamite', artist: 'Taio Cruz', type: 'cool' },
+                { name: 'Party Rock Anthem', artist: 'LMFAO', type: 'cool' },
+                { name: 'What Makes You Beautiful', artist: 'One Direction', type: 'cool' },
+                { name: 'Call Me Maybe', artist: 'Carly Rae Jepsen', type: 'silly' },
+                { name: 'Shut Up and Dance', artist: 'Walk the Moon', type: 'cool' },
+                { name: 'Best Day of My Life', artist: 'American Authors', type: 'cool' },
+                { name: 'Good Time', artist: 'Owl City & Carly Rae Jepsen', type: 'cool' },
+                { name: 'Counting Stars', artist: 'OneRepublic', type: 'cool' },
+                { name: 'Rather Be', artist: 'Clean Bandit', type: 'cool' }
+            ];
+
+            const generateYoYoName = () => {
+                if (!name.trim()) {
+                    return;
+                }
+                
+                const prefixes = isSillyMode ? sillyPrefixes : awesomePrefixes;
+                const middleParts = isSillyMode ? sillyMiddleParts : awesomeMiddleParts;
+                const tricks = isSillyMode ? sillyTricks : awesomeTricks;
+                const suffixes = isSillyMode ? sillySuffixes : awesomeSuffixes;
+
+                const prefixIndex = Math.floor(Math.random() * prefixes.length);
+                const middleIndex = Math.floor(Math.random() * middleParts.length);
+                const trickIndex = Math.floor(Math.random() * tricks.length);
+                const suffixIndex = Math.floor(Math.random() * suffixes.length);
+                const easyTrickIndex = Math.floor(Math.random() * easyTricks.length);
+                const songIndex = Math.floor(Math.random() * yoyoSongs.length);
+
+                const generatedName = `${prefixes[prefixIndex]} ${middleParts[middleIndex]} ${tricks[trickIndex]} ${suffixes[suffixIndex]}`;
+                
+                setYoyoName(generatedName);
+                setEasyTrick(easyTricks[easyTrickIndex]);
+                setRecommendedSong(yoyoSongs[songIndex]);
+                setShowResult(true);
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === 'Enter') {
+                    generateYoYoName();
+                }
+            };
+
+            const reset = () => {
+                setName('');
+                setYoyoName('');
+                setEasyTrick('');
+                setRecommendedSong('');
+                setShowResult(false);
+            };
+
+            return (
+                <div className="min-h-screen bg-blue-800 relative overflow-hidden flex items-center justify-center p-4">
+                    <div className="absolute inset-0 opacity-20">
+                        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-400 rounded-full blur-3xl"></div>
+                        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
+                    </div>
+                    
+                    <div className="absolute inset-0 opacity-10" style={{
+                        backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,.3) 10px, rgba(0,0,0,.3) 11px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,.3) 20px, rgba(0,0,0,.3) 21px)`
+                    }}></div>
+
+                    <div className="max-w-2xl w-full relative z-10">
+                        <div className="text-center mb-8">
+                            <div className="inline-block bg-gradient-to-br from-blue-900 to-blue-950 rounded-full p-6 mb-4 shadow-2xl border-4 border-yellow-400 transform rotate-6 hover:rotate-0 transition-transform">
+                                <div className="text-7xl transform -rotate-6">🪀</div>
+                            </div>
+                            <h1 className="text-6xl font-black text-yellow-400 mb-3 tracking-tight" style={{
+                                textShadow: '4px 4px 0px #000000, 6px 6px 0px rgba(0,0,0,0.5)',
+                                WebkitTextStroke: '3px #000000'
+                            }}>PACK 194</h1>
+                            <h2 className="text-4xl font-black text-white mb-2 tracking-wide" style={{
+                                textShadow: '3px 3px 0px #000000, 5px 5px 0px rgba(0,0,0,0.5)',
+                                WebkitTextStroke: '2px #000000'
+                            }}>YO-YO NAME MACHINE</h2>
+                            <p className="text-2xl font-bold text-yellow-300 drop-shadow-lg" style={{
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                            }}>Get Your Street Name! 🪀</p>
+                        </div>
+
+                        <div className="bg-white rounded-3xl shadow-2xl p-8 transform transition-all border-8 border-blue-600 relative overflow-hidden">
+                            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-600 via-yellow-400 to-blue-600"></div>
+                            <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-400 via-blue-600 to-yellow-400"></div>
+                            
+                            {!showResult ? (
+                                <div className="space-y-6">
+                                    <div className="flex gap-4 mb-6">
+                                        <button
+                                            onClick={() => setIsSillyMode(true)}
+                                            className={`flex-1 py-4 px-6 rounded-2xl font-black text-xl transition-all border-4 ${
+                                                isSillyMode
+                                                    ? 'bg-red-500 text-white border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+                                                    : 'bg-gray-100 text-gray-600 border-gray-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]'
+                                            }`}
+                                            style={{ textShadow: isSillyMode ? '2px 2px 0px rgba(0,0,0,0.3)' : 'none' }}
+                                        >😂 SILLY</button>
+                                        <button
+                                            onClick={() => setIsSillyMode(false)}
+                                            className={`flex-1 py-4 px-6 rounded-2xl font-black text-xl transition-all border-4 ${
+                                                !isSillyMode
+                                                    ? 'bg-blue-600 text-white border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
+                                                    : 'bg-gray-100 text-gray-600 border-gray-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]'
+                                            }`}
+                                            style={{ textShadow: !isSillyMode ? '2px 2px 0px rgba(0,0,0,0.3)' : 'none' }}
+                                        >⚡ AWESOME</button>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="nameInput" className="block text-3xl font-black text-gray-900 mb-3" style={{
+                                            textShadow: '2px 2px 0px #facc15'
+                                        }}>YOUR NAME:</label>
+                                        <input
+                                            id="nameInput"
+                                            type="text"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            onKeyPress={handleKeyPress}
+                                            placeholder="Type here..."
+                                            className="w-full px-6 py-4 text-2xl border-4 border-gray-900 rounded-2xl focus:outline-none focus:border-yellow-400 transition-colors font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-blue-50"
+                                            autoFocus
+                                        />
+                                    </div>
+                                    
+                                    <button
+                                        onClick={generateYoYoName}
+                                        disabled={!name.trim()}
+                                        className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 disabled:from-gray-300 disabled:to-gray-400 text-gray-900 font-black py-5 px-8 rounded-2xl text-3xl border-4 border-gray-900 transform transition-all disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                        style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.2)' }}
+                                    >
+                                        <Sparkles className="w-8 h-8" />
+                                        {isSillyMode ? 'GET SILLY! 🤪' : 'GET AWESOME! ⚡'}
+                                        <Sparkles className="w-8 h-8" />
+                                    </button>
+
+                                    <div className="mt-6 p-5 bg-blue-600 rounded-2xl border-4 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <p className="text-center text-white font-bold text-lg" style={{
+                                            textShadow: '2px 2px 0px rgba(0,0,0,0.5)'
+                                        }}>
+                                            🏕️ <span className="font-black">CUB SCOUT PACK 194</span> 🏕️<br />
+                                            <span className="text-yellow-300 font-black">YO-YO MASTERS IN TRAINING!</span> 🪀⚡
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-6 text-center">
+                                    <div className="transform hover:scale-110 transition-transform">
+                                        <div className="text-8xl mb-4 animate-bounce">🪀</div>
+                                    </div>
+                                    
+                                    <div>
+                                        <p className="text-2xl font-black text-gray-900 mb-4" style={{
+                                            textShadow: '2px 2px 0px #facc15'
+                                        }}>YO {name.toUpperCase()}, YOUR NAME IS...</p>
+                                        <div className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400 p-8 rounded-3xl transform transition-all hover:scale-105 border-8 border-gray-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative overflow-hidden">
+                                            <div className="absolute top-0 left-0 w-20 h-20 bg-blue-600 rounded-full opacity-30 blur-xl"></div>
+                                            <div className="absolute bottom-0 right-0 w-20 h-20 bg-blue-600 rounded-full opacity-30 blur-xl"></div>
+                                            
+                                            <h2 className="text-4xl md:text-5xl font-black text-gray-900 break-words relative z-10" style={{
+                                                textShadow: '3px 3px 0px #1e40af, 5px 5px 0px rgba(0,0,0,0.3)'
+                                            }}>{yoyoName.toUpperCase()}</h2>
+                                        </div>
+                                        {isSillyMode && (
+                                            <p className="text-xl text-yellow-300 mt-4 font-black" style={{
+                                                textShadow: '2px 2px 0px rgba(0,0,0,0.8)'
+                                            }}>*HAHA THAT'S HILARIOUS!* 😂</p>
+                                        )}
+                                    </div>
+
+                                    <div className="bg-blue-600 border-4 border-gray-900 rounded-3xl p-6 mt-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                                        <h3 className="text-3xl font-black text-yellow-400 mb-4" style={{
+                                            textShadow: '2px 2px 0px rgba(0,0,0,0.5)'
+                                        }}>🎯 YOUR FIRST TRICK!</h3>
+                                        <div className="bg-white rounded-2xl p-5 border-4 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <p className="text-2xl font-black text-blue-600 mb-3" style={{
+                                                textShadow: '1px 1px 0px rgba(250,204,21,0.5)'
+                                            }}>{easyTrick.name.toUpperCase()}</p>
+                                            <p className="text-lg font-bold text-gray-800">{easyTrick.description}</p>
+                                            <p className="text-sm text-gray-600 mt-3 italic">
+                                                💡 Search "{easyTrick.name} yo-yo trick" on YouTube to learn!
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-yellow-400 border-4 border-gray-900 rounded-3xl p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                                        <h3 className="text-3xl font-black text-gray-900 mb-4" style={{
+                                            textShadow: '2px 2px 0px rgba(255,255,255,0.5)'
+                                        }}>🎵 YOUR YO-YO JAM!</h3>
+                                        <div className="bg-white rounded-2xl p-5 border-4 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                            <p className="text-2xl font-black text-yellow-600 mb-2" style={{
+                                                textShadow: '1px 1px 0px rgba(37,99,235,0.3)'
+                                            }}>"{recommendedSong.name}"</p>
+                                            <p className="text-xl font-bold text-gray-700 mb-3">by {recommendedSong.artist}</p>
+                                            <p className="text-lg font-bold text-gray-600">
+                                                {recommendedSong.type === 'cool' ? '🔥 Cool 90s Rap!' : '😂 Silly Dance Song!'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4 mt-8">
+                                        <button
+                                            onClick={reset}
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 px-8 rounded-2xl text-2xl border-4 border-gray-900 transform transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                            style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.3)' }}
+                                        >GET ANOTHER NAME!</button>
+                                    </div>
+
+                                    <div className="mt-6 p-5 bg-yellow-400 rounded-2xl border-4 border-gray-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                        <p className="text-gray-900 font-black text-xl" style={{
+                                            textShadow: '1px 1px 0px rgba(255,255,255,0.5)'
+                                        }}>NOW GO PRACTICE, {yoyoName.split(' ')[0].toUpperCase()}! 🪀</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="mt-8 text-center">
+                            <div className="inline-block bg-blue-600 px-8 py-4 rounded-2xl border-4 border-yellow-400 shadow-[4px_4px_0px_0px_rgba(250,204,21,1)]">
+                                <p className="text-2xl font-black text-white" style={{
+                                    textShadow: '2px 2px 0px rgba(0,0,0,0.5)'
+                                }}>🦅 PACK 194 🦅</p>
+                                <p className="text-lg font-bold text-yellow-300">YO-YO LEGENDS!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<YoYoNameGenerator />, document.getElementById('root'));
+    </script>
+</body>
+</html>
